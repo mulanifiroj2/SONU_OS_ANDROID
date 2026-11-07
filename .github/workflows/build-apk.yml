@@ -1,0 +1,39 @@
+name: Build SONU OS APK
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'SONU_OS_V15_V2.zip'
+      - '.github/workflows/build-apk.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract project ZIP
+        run: |
+          unzip -q SONU_OS_V15_V2.zip -d extracted
+          find extracted -name gradlew -type f
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Build APK
+        run: |
+          cd extracted/SONU_OS_ANDROID
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: SONU-OS-APK
+          path: extracted/SONU_OS_ANDROID/app/build/outputs/apk/debug/*.apk
