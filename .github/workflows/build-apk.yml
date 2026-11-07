@@ -12,11 +12,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Extract project ZIP
-        run: unzip -q SONU_OS_V15_V2.zip -d extracted
+      - name: Extract project
+        run: |
+          unzip -q SONU_OS_V15_V2.zip -d extracted
+          find extracted -name gradlew -type f
 
       - name: Set up JDK
         uses: actions/setup-java@v4
